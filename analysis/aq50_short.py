@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from plots import plot_pca
 
 aq50_df = pd.read_csv('../data/cleaned_aq50.csv')
 
@@ -22,4 +23,6 @@ cumulative_variance_ratio = np.cumsum(variance_ratio)
 print(f"First component explains {variance_ratio[0]:.1%}")
 print(f"Components needed for 80%: {np.argmax(cumulative_variance_ratio >= 0.80) + 1}")
 print(f"Components needed for 90%: {np.argmax(cumulative_variance_ratio >= 0.90) + 1}")
+
+plot_pca(variance_ratio, 'AQ-50 PCA Variance explained', '../plots/aq50_pca_variance_explained.png')
 
