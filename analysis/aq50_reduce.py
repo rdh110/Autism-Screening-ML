@@ -13,8 +13,8 @@ y = aq50_df['autistic']
 # official AQ-10 columns in the dataset
 aq10_columns = [f'aq_{i}' for i in AQ10]
 
-# skip these models cause the take long time for now
-skip_models = ['Random Forest', 'Neural Network']
+# models to skip during analysis
+skip_models = []
 
 all_rows = []
 
@@ -40,10 +40,15 @@ for name, model in get_models().items():
 results_df = pd.DataFrame(all_rows)
 results_df.to_csv('../results/aq50_reduce_all_models.csv', index=False)
 
+
 # average each mode's question sets over all test folds
 average_results = results_df.groupby(['Model', 'Question Set Name'], sort=False)[['Accuracy', 'Precision', 'Recall', 'F1']].agg(['mean', 'std'])
+
+average_results.columns = [f'{metric} {stat}' for metric, stat in average_results.columns]
+
+# When bringing back for all models, remove {name} from file name
+# save average results to a file
+average_results.round(3).to_csv('../results/aq50_reduce_average_all_models.csv')
 print(average_results.round(3))
 
-# save average results to a file
-average_results.to_csv('../results/aq50_reduce_average.csv')
 
